@@ -52,3 +52,17 @@ class Cards(collections.abc.Sequence):
 
     def __init__(self, cards: typing.Sequence[Card]=tuple()) -> None:
         self._cards = cards
+
+
+class Deck(Cards):
+    @staticmethod
+    def oneset() -> typing.Sequence[Card]:
+        return tuple(
+            Card(suit, rank)
+            for suit in Card.Suit for rank in Card.Rank)
+
+    def __init__(self, cards: typing.Sequence[Card]=None) -> None:
+        super().__init__(cards or Deck.oneset())
+
+    def shuffle(self) -> 'Deck':
+        return Deck(tuple(random.sample(self, k=len(self))))
