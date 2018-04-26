@@ -50,6 +50,14 @@ class Cards(collections.abc.Sequence):
     def __len__(self):
         return len(self._cards)
 
+    def __add__(self, other: 'Cards') -> 'Cards':
+        if not isinstance(other, Cards):
+            raise TypeError(
+                f'unsupported operand type(s) for +: '
+                f"'{self.__class__.__name__}' and '{other.__class__.__name__}'"
+            )
+        return Cards(self[:] + other[:])
+
     def __init__(self, cards: typing.Sequence[Card]=tuple()) -> None:
         self._cards = cards
 
