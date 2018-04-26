@@ -16,10 +16,16 @@ class Player:
     ) -> typing.Tuple['Player', Deck]:
         if num not in range(1, len(deck) + 1):
             return player, deck
-        return Player(player.hand() + Cards(deck[:num])), Deck(deck[num:])
+        return (
+            Player(player.name(), hand=player.hand() + Cards(deck[:num])),
+            Deck(deck[num:]))
 
-    def __init__(self, hand: Cards=Cards()) -> None:
+    def __init__(self, name: str, *, hand: Cards=Cards()) -> None:
+        self._name = name
         self._hand = hand
+
+    def name(self) -> str:
+        return self._name
 
     def hand(self) -> Cards:
         return self._hand
