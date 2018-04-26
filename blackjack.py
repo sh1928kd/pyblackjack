@@ -53,6 +53,12 @@ class GuestDecision(enum.Enum):
 
 class Blackjack:
     @staticmethod
+    def _show_hand(player: Player):
+        print("{}'s cards: {}".format(
+            player.name(),
+            ' '.join(str(card) for card in player.hand())))
+
+    @staticmethod
     def _result(*, dealer: Player, guest: Player):
         print('')
         print("* Judge *")
@@ -71,4 +77,40 @@ class Blackjack:
             dealer, deck = Player.draw(dealer, deck)
             guest, deck = Player.draw(guest, deck)
 
+        print('')
+        print(f"{dealer.name()}'s 1st card: " + str(dealer.hand()[0]))
+
+        print('')
+        print(f"* {guest.name()}'s turn *")
+        Blackjack._show_hand(guest)
+        while not BlackjackRule.busts(guest):
+            decision = GuestDecision.decide()
+            if decision is GuestDecision.STAND:
+                break
+            if decision is GuestDecision.HIT:
+                guest, deck = Player.draw(guest, deck)
+                Blackjack._show_hand(guest)
+        else:
+            print('Bust!')
+            Blackjack._result(dealer=dealer, guest=guest)
+            return
+
+        print('')
+        print(f"* {dealer.name()}'s turn *")
+        Blackjack._show_hand(dealer)
+        while not BlackjackRule.busts(dealer):
+            if BlackjackRule.point(dealer) >= 17:
+                break
+            else:
+                dealer, deck = Player.draw(dealer, deck)
+                Blackjack._show_hand(dealer)
+        else:
+            print('Bust!')
+            Blackjack._result(dealer=dealer, guest=guest)
+            return
+
         Blackjack._result(dealer=dealer, guest=guest)
+
+
+if __name__ == '__main__':
+    Blackjack.play()
