@@ -1,7 +1,10 @@
 # coding=utf-8
 import enum
 
-from card import Card
+from card import (
+    Card,
+    Deck,
+)
 from player import Player
 
 BLACKJACK = 21
@@ -46,3 +49,26 @@ class GuestDecision(enum.Enum):
                 return command_table[command]
             else:
                 print(f'Oops, "{command}" is invalid!')
+
+
+class Blackjack:
+    @staticmethod
+    def _result(*, dealer: Player, guest: Player):
+        print('')
+        print("* Judge *")
+        print(f'{BlackjackRule.judge(dealer=dealer, guest=guest).name()} win!')
+
+    @staticmethod
+    def play():
+        print('********************')
+        print('* Blackjack')
+
+        dealer = Player(name='Dealer')
+        guest = Player(name='Guest')
+        deck = Deck().shuffle().shuffle()
+
+        for _ in range(2):
+            dealer, deck = Player.draw(dealer, deck)
+            guest, deck = Player.draw(guest, deck)
+
+        Blackjack._result(dealer=dealer, guest=guest)
