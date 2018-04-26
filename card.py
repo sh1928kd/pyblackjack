@@ -1,5 +1,8 @@
 # coding=utf-8
+import collections
 import enum
+import typing
+import random
 
 
 class Card:
@@ -38,3 +41,14 @@ class Card:
 
     def rank(self) -> Rank:
         return self._rank
+
+
+class Cards(collections.abc.Sequence):
+    def __getitem__(self, key):
+        return self._cards[key]
+
+    def __len__(self):
+        return len(self._cards)
+
+    def __init__(self, cards: typing.Sequence[Card]=tuple()) -> None:
+        self._cards = cards
