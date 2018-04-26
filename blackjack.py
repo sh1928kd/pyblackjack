@@ -29,3 +29,20 @@ class BlackjackRule:
         if BlackjackRule.point(dealer) < BlackjackRule.point(guest):
             return guest
         return dealer
+
+
+@enum.unique
+class GuestDecision(enum.Enum):
+    HIT = enum.auto()
+    STAND = enum.auto()
+
+    @staticmethod
+    def decide() -> 'GuestDecision':
+        command_table = dict((v.name.lower()[0], v) for v in GuestDecision)
+        print(f'{"/".join(v.name.title() for v in command_table.values())}?')
+        while True:
+            command = input(f'[{",".join(command_table.keys())}]: ')
+            if command in command_table:
+                return command_table[command]
+            else:
+                print(f'Oops, "{command}" is invalid!')
